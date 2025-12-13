@@ -143,7 +143,7 @@ require_once __DIR__ . '/../includes/header.php';
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="fw-bold mb-0">Kelola Kursus</h2>
-            <a href="/tutor/course-create.php" class="btn btn-primary">
+            <a href="/pages/tutor/create_course.php" class="btn btn-primary">
                 <i class="bi bi-plus-lg me-2"></i>Tambah Kursus
             </a>
         </div>
@@ -236,7 +236,7 @@ require_once __DIR__ . '/../includes/header.php';
                     <table class="table table-hover mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>Kursus</th>
+                                <th style="min-width: 300px;">Kursus</th>
                                 <th>Kategori</th>
                                 <th>Tutor</th>
                                 <th>Harga</th>
@@ -258,17 +258,28 @@ require_once __DIR__ . '/../includes/header.php';
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <img src="<?= $course['thumbnail'] ? '/' . $course['thumbnail'] : '/assets/images/default-course.png' ?>" 
-                                             class="rounded me-3" width="60" height="40" style="object-fit: cover;">
-                                        <div>
-                                            <div class="fw-medium text-truncate" style="max-width: 200px;">
+                                        <!-- Thumbnail dengan helper function seperti di index.php -->
+                                        <div class="position-relative me-3" style="width: 120px; height: 68px; flex-shrink: 0;">
+                                            <img src="<?= getCourseImage($course) ?>" 
+                                                 class="rounded w-100 h-100" 
+                                                 style="object-fit: cover;"
+                                                 alt="<?= htmlspecialchars($course['title']) ?>"
+                                                 onerror="this.src='https://via.placeholder.com/750x422/4f46e5/ffffff?text=LGN+Course'">
+                                            <?php if ($course['is_featured']): ?>
+                                            <span class="position-absolute top-0 end-0 badge bg-warning text-dark" style="font-size: 0.65rem;">
+                                                <i class="bi bi-star-fill"></i>
+                                            </span>
+                                            <?php endif; ?>
+                                        </div>
+                                        <div style="min-width: 0;">
+                                            <div class="fw-medium text-truncate" style="max-width: 180px;" title="<?= htmlspecialchars($course['title']) ?>">
                                                 <?= htmlspecialchars($course['title']) ?>
                                             </div>
-                                            <small class="text-muted">
+                                            <small class="text-muted d-block text-truncate" style="max-width: 180px;">
                                                 <code><?= $course['slug'] ?></code>
-                                                <?php if ($course['is_featured']): ?>
-                                                <span class="badge bg-warning text-dark ms-1">Featured</span>
-                                                <?php endif; ?>
+                                            </small>
+                                            <small class="text-muted">
+                                                <i class="bi bi-bar-chart-fill me-1"></i><?= ucfirst($course['level']) ?>
                                             </small>
                                         </div>
                                     </div>
@@ -283,9 +294,9 @@ require_once __DIR__ . '/../includes/header.php';
                                 <td><?= htmlspecialchars($course['tutor_name'] ?? '-') ?></td>
                                 <td>
                                     <?php if ($course['price'] > 0): ?>
-                                    <div><?= formatCurrency($course['price']) ?></div>
+                                    <div class="fw-medium"><?= formatCurrency($course['price']) ?></div>
                                     <?php if ($course['discount_price']): ?>
-                                    <small class="text-success"><?= formatCurrency($course['discount_price']) ?></small>
+                                    <small class="text-success"><del><?= formatCurrency($course['discount_price']) ?></del></small>
                                     <?php endif; ?>
                                     <?php else: ?>
                                     <span class="badge bg-success">Gratis</span>
@@ -308,20 +319,15 @@ require_once __DIR__ . '/../includes/header.php';
                                         <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
                                             Aksi
                                         </button>
-                                        <ul class="dropdown-menu">
+                                        <ul class="dropdown-menu dropdown-menu-end">
                                             <li>
-                                                <a href="/course/<?= $course['slug'] ?>" class="dropdown-item" target="_blank">
+                                                <a href="/pages/course_detail.php?slug=<?= $course['slug'] ?>" class="dropdown-item" target="_blank">
                                                     <i class="bi bi-eye me-2"></i>Lihat Kursus
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="/tutor/course-edit.php?id=<?= $course['id'] ?>" class="dropdown-item">
+                                                <a href="/pages/tutor/edit_course.php?id=<?= $course['id'] ?>" class="dropdown-item">
                                                     <i class="bi bi-pencil me-2"></i>Edit Kursus
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="/tutor/lessons.php?course_id=<?= $course['id'] ?>" class="dropdown-item">
-                                                    <i class="bi bi-list-ul me-2"></i>Kelola Lessons
                                                 </a>
                                             </li>
                                             <li><hr class="dropdown-divider"></li>
