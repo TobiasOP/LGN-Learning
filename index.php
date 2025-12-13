@@ -219,42 +219,46 @@ require_once 'includes/header.php';
             </div>
             <?php else: ?>
             <div class="row g-4">
+                <!-- Featured Courses Section - Update bagian ini di index.php -->
                 <?php foreach ($featuredCourses as $course): ?>
                 <div class="col-lg-3 col-md-6">
                     <div class="card course-card h-100">
                         <div class="card-img-wrapper">
+                            <!-- GAMBAR COURSE - GUNAKAN HELPER FUNCTION -->
                             <img src="<?= getCourseImage($course) ?>" 
                                  class="card-img-top" 
                                  alt="<?= htmlspecialchars($course['title']) ?>"
                                  onerror="this.src='https://via.placeholder.com/750x422/4f46e5/ffffff?text=LGN+Course'">
+                            
                             <span class="card-badge badge badge-level <?= htmlspecialchars($course['level']) ?>">
                                 <?= ucfirst(htmlspecialchars($course['level'])) ?>
                             </span>
+                            
                             <?php if (isLoggedIn()): ?>
                             <div class="card-wishlist" data-course-id="<?= (int)$course['id'] ?>">
                                 <i class="bi bi-heart"></i>
                             </div>
                             <?php endif; ?>
                         </div>
+                        
                         <div class="card-body">
                             <span class="course-category"><?= htmlspecialchars($course['category_name']) ?></span>
+                            
                             <h5 class="course-title">
                                 <a href="/pages/course_detail.php?slug=<?= htmlspecialchars($course['slug']) ?>">
                                     <?= htmlspecialchars($course['title']) ?>
                                 </a>
                             </h5>
+                            
                             <div class="tutor-info">
-                                <?php 
-                                $avatarUrl = $course['tutor_avatar'] && file_exists(__DIR__ . '/' . $course['tutor_avatar'])
-                                    ? '/' . $course['tutor_avatar']
-                                    : 'https://ui-avatars.com/api/?name=' . urlencode($course['tutor_name']) . '&background=4f46e5&color=fff&size=36';
-                                ?>
-                                <img src="<?= $avatarUrl ?>" 
+                                <!-- AVATAR TUTOR - GUNAKAN HELPER FUNCTION -->
+                                <img src="<?= getUserAvatar($course, 36) ?>" 
                                      alt="<?= htmlspecialchars($course['tutor_name']) ?>" 
                                      class="tutor-avatar"
                                      onerror="this.src='https://ui-avatars.com/api/?name=Tutor&background=4f46e5&color=fff&size=36'">
                                 <span class="tutor-name"><?= htmlspecialchars($course['tutor_name']) ?></span>
                             </div>
+                            
                             <div class="course-meta">
                                 <span class="course-rating">
                                     <span class="stars"><i class="bi bi-star-fill"></i></span>
@@ -263,6 +267,7 @@ require_once 'includes/header.php';
                                 <span><i class="bi bi-people"></i> <?= number_format((int)$course['enrollment_count']) ?></span>
                             </div>
                         </div>
+                        
                         <div class="card-footer">
                             <div>
                                 <?php 
@@ -429,4 +434,5 @@ require_once 'includes/header.php';
 </main>
 
 <?php require_once 'includes/footer.php'; ?>
+
 
