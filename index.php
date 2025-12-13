@@ -228,7 +228,7 @@ require_once 'includes/header.php';
                                 ? '/' . $course['thumbnail'] 
                                 : 'https://via.placeholder.com/750x422/4f46e5/ffffff?text=' . urlencode(substr($course['title'], 0, 20));
                             ?>
-                            <img src="<?= $thumbnailUrl ?>" 
+                            <img src="<?= getCourseImage($course) ?>" 
                                  class="card-img-top" 
                                  alt="<?= htmlspecialchars($course['title']) ?>"
                                  onerror="this.src='https://via.placeholder.com/750x422/4f46e5/ffffff?text=LGN+Course'">
