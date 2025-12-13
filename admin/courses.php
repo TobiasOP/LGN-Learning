@@ -51,13 +51,16 @@ $countStmt->execute($params);
 $total = $countStmt->fetchColumn();
 $totalPages = ceil($total / $limit);
 
-// Get courses
+// Get courses - lesson count melalui course_sections
 $stmt = $db->prepare("
     SELECT c.*, 
            cat.name as category_name,
            u.name as tutor_name,
            (SELECT COUNT(*) FROM enrollments WHERE course_id = c.id) as enrollment_count,
-           (SELECT COUNT(*) FROM lessons WHERE course_id = c.id) as lesson_count
+           (SELECT COUNT(*) FROM lessons l 
+            INNER JOIN course_sections cs ON l.section_id = cs.id 
+            WHERE cs.course_id = c.id) as lesson_count,
+           (SELECT COUNT(*) FROM course_sections WHERE course_id = c.id) as section_count
     FROM courses c
     LEFT JOIN categories cat ON c.category_id = cat.id
     LEFT JOIN users u ON c.tutor_id = u.id
@@ -114,7 +117,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     redirect('/admin/courses.php', 'Tidak dapat menghapus kursus yang memiliki pendaftaran', 'error');
                 } else {
                     // Delete related data first
-                    $db->prepare("DELETE FROM lessons WHERE course_id = ?")->execute([$courseId]);
+                    // Delete lessons melalui course_sections
+                    $db->prepare("
+                        DELETE l FROM lessons l
+                        INNER JOIN course_sections cs ON l.section_id = cs.id
+                        WHERE cs.course_id = ? 
+                    ")->execute([$courseId]);
+                    
+                    // Delete course_sections
+                    $db->prepare("DELETE FROM course_sections WHERE course_id = ?")->execute([$courseId]);
+                    
+                    // Delete course
                     $db->prepare("DELETE FROM courses WHERE id = ?")->execute([$courseId]);
                     redirect('/admin/courses.php', 'Kursus berhasil dihapus', 'success');
                 }
@@ -227,7 +240,7 @@ require_once __DIR__ . '/../includes/header.php';
                                 <th>Kategori</th>
                                 <th>Tutor</th>
                                 <th>Harga</th>
-                                <th>Lessons</th>
+                                <th>Konten</th>
                                 <th>Enrollments</th>
                                 <th>Status</th>
                                 <th>Aksi</th>
@@ -279,7 +292,8 @@ require_once __DIR__ . '/../includes/header.php';
                                     <?php endif; ?>
                                 </td>
                                 <td>
-                                    <span class="badge bg-info"><?= $course['lesson_count'] ?> lessons</span>
+                                    <div><span class="badge bg-info"><?= $course['section_count'] ?> section</span></div>
+                                    <small class="text-muted"><?= $course['lesson_count'] ?> lessons</small>
                                 </td>
                                 <td>
                                     <span class="badge bg-primary"><?= $course['enrollment_count'] ?> siswa</span>
@@ -334,7 +348,7 @@ require_once __DIR__ . '/../includes/header.php';
                                             <?php if ($course['enrollment_count'] == 0): ?>
                                             <li><hr class="dropdown-divider"></li>
                                             <li>
-                                                <form method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus kursus ini? Semua lessons akan ikut terhapus.')">
+                                                <form method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus kursus ini? Semua sections dan lessons akan ikut terhapus.')">
                                                     <input type="hidden" name="action" value="delete">
                                                     <input type="hidden" name="course_id" value="<?= $course['id'] ?>">
                                                     <button type="submit" class="dropdown-item text-danger">
