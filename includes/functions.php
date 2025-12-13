@@ -489,7 +489,6 @@ function setSetting($key, $value) {
 
 }
 
-
 function getCourseImage($course, $checkFileExists = true) {
     // If $course is string (just thumbnail path)
     if (is_string($course)) {
@@ -559,4 +558,22 @@ function getUserAvatar($user, $size = 128) {
     // Fallback to UI Avatars
     $initials = urlencode($name);
     return "https://ui-avatars.com/api/?name={$initials}&background=4f46e5&color=fff&size={$size}";
+}
+
+/**
+ * Get category icon with fallback
+ * @param array $category Category data
+ * @return string Icon class
+ */
+function getCategoryIcon($category) {
+    return $category['icon'] ?? 'bi-folder';
+}
+
+/**
+ * Get category color with fallback
+ * @param array $category Category data
+ * @return string Color hex code
+ */
+function getCategoryColor($category) {
+    return $category['color'] ?? '#4f46e5';
 }
