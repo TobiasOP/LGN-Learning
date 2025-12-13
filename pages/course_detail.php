@@ -319,8 +319,7 @@ require_once __DIR__ . '/../includes/header.php';
                 
                 <!-- Sidebar -->
                 <div class="col-lg-4">
-                    <div class="card sticky-top" style="top: 100px;">
-                        <!-- Course Preview -->
+                    <div class="card sticky-top" style="top: 100px; z-index: 10; position: sticky;">                        <!-- Course Preview -->
                         <?php if ($course['preview_video_id']): ?>
                             <div class="video-player-wrapper">
                                 <div class="video-player-container">
@@ -484,3 +483,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>
+
