@@ -679,7 +679,7 @@ COMMIT;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
 
-CREATE TABLE IF NOT EXISTS `password_resets` (
+CREATE TABLE  `password_resets` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `email` varchar(100) NOT NULL,
