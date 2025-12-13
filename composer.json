@@ -1,9 +1,12 @@
 {
-  "name": "project/lgnlearning",
-  "type": "project",
-  "require": {
-    "php": "^8.0",
-    "ext-pdo": "*",
-    "ext-pdo_mysql": "*"
-  }
+    "name": "lgn/elearning",
+    "description": "LGN E-Learning Platform",
+    "require": {
+        "php": "^8.2"
+    },
+    "config": {
+        "platform": {
+            "php":  "8.2"
+        }
+    }
 }
