@@ -27,7 +27,7 @@ if (!$course) {
     redirect('/admin/courses.php', 'Kursus tidak ditemukan', 'error');
 }
 
-$pageTitle = 'Edit:  ' . $course['title'];
+$pageTitle = 'Edit: ' . $course['title'];
 
 // Get categories
 $categories = $db->query("SELECT * FROM categories WHERE is_active = 1 ORDER BY name")->fetchAll();
@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $courseId
             ]);
             
-            redirect("/admin/edit_course.php? id=$courseId", 'Kursus berhasil diperbarui', 'success');
+            redirect("/admin/edit_course.php?id=$courseId", 'Kursus berhasil diperbarui', 'success');
             break;
             
         case 'add_section':
@@ -125,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $sectionDescription = sanitize($_POST['section_description'] ?? '');
             
             if ($sectionId && !empty($sectionTitle)) {
-                $stmt = $db->prepare("UPDATE course_sections SET title = ?, description = ? WHERE id = ?  AND course_id = ?");
+                $stmt = $db->prepare("UPDATE course_sections SET title = ?, description = ? WHERE id = ? AND course_id = ?");
                 $stmt->execute([$sectionTitle, $sectionDescription, $sectionId, $courseId]);
                 
                 redirect("/admin/edit_course.php?id=$courseId", 'Section berhasil diperbarui', 'success');
@@ -139,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Delete lessons in section first
                 $db->prepare("DELETE FROM lessons WHERE section_id = ?")->execute([$sectionId]);
                 // Delete section
-                $db->prepare("DELETE FROM course_sections WHERE id = ?  AND course_id = ?")->execute([$sectionId, $courseId]);
+                $db->prepare("DELETE FROM course_sections WHERE id = ? AND course_id = ?")->execute([$sectionId, $courseId]);
                 
                 updateCourseTotals($courseId);
                 redirect("/admin/edit_course.php?id=$courseId", 'Section berhasil dihapus', 'success');
@@ -155,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $driveUrl = sanitize($_POST['drive_url'] ?? '');
             $articleContent = $_POST['article_content'] ?? '';
             $durationMinutes = intval($_POST['duration_minutes'] ?? 0);
-            $isPreview = isset($_POST['is_preview']) ? 1 :  0;
+            $isPreview = isset($_POST['is_preview']) ? 1 : 0;
             
             if ($sectionId && !empty($lessonTitle)) {
                 $orderNumber = $db->query("SELECT COALESCE(MAX(order_number), 0) + 1 FROM lessons WHERE section_id = $sectionId")->fetchColumn();
@@ -180,7 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $driveUrl = sanitize($_POST['drive_url'] ?? '');
             $articleContent = $_POST['article_content'] ?? '';
             $durationMinutes = intval($_POST['duration_minutes'] ?? 0);
-            $isPreview = isset($_POST['is_preview']) ? 1 :  0;
+            $isPreview = isset($_POST['is_preview']) ? 1 : 0;
             
             if ($lessonId && !empty($lessonTitle)) {
                 $stmt = $db->prepare("
@@ -209,7 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             break;
             
         case 'publish': 
-            $stmt = $db->prepare("UPDATE courses SET is_published = 1 WHERE id = ? ");
+            $stmt = $db->prepare("UPDATE courses SET is_published = 1 WHERE id = ?");
             $stmt->execute([$courseId]);
             redirect("/admin/edit_course.php?id=$courseId", 'Kursus berhasil dipublikasikan', 'success');
             break;
@@ -228,7 +228,7 @@ function updateCourseTotals($courseId) {
     $stats = $db->query("
         SELECT COUNT(*) as total_lessons, COALESCE(SUM(duration_minutes), 0) as total_duration
         FROM lessons l
-        JOIN course_sections cs ON l. section_id = cs.id
+        JOIN course_sections cs ON l.section_id = cs.id
         WHERE cs.course_id = $courseId
     ")->fetch();
     
@@ -253,8 +253,8 @@ require_once __DIR__ . '/../includes/header.php';
                 </nav>
                 <h4 class="fw-bold mb-0"><?= htmlspecialchars($course['title']) ?></h4>
                 <small class="text-muted">
-                    Tutor: <?= htmlspecialchars($course['tutor_name'] ?? 'Tidak ada') ? > | 
-                    <?= $enrollmentCount ? > siswa terdaftar
+                    Tutor: <?= htmlspecialchars($course['tutor_name'] ?? 'Tidak ada') ?> | 
+                    <?= $enrollmentCount ?> siswa terdaftar
                 </small>
             </div>
             <div class="d-flex gap-2">
@@ -311,7 +311,7 @@ require_once __DIR__ . '/../includes/header.php';
                                 <label class="form-label">Tutor <span class="text-danger">*</span></label>
                                 <select name="tutor_id" class="form-select" required>
                                     <?php foreach ($tutors as $t): ?>
-                                    <option value="<?= $t['id'] ?>" <?= $course['tutor_id'] == $t['id'] ? 'selected' : '' ? >>
+                                    <option value="<?= $t['id'] ?>" <?= $course['tutor_id'] == $t['id'] ? 'selected' : '' ?>>
                                         <?= htmlspecialchars($t['name']) ?> (<?= $t['email'] ?>)
                                     </option>
                                     <?php endforeach; ?>
@@ -324,7 +324,7 @@ require_once __DIR__ . '/../includes/header.php';
                                     <label class="form-label">Kategori <span class="text-danger">*</span></label>
                                     <select name="category_id" class="form-select" required>
                                         <?php foreach ($categories as $cat): ?>
-                                        <option value="<?= $cat['id'] ?>" <?= $course['category_id'] == $cat['id'] ?  'selected' :  '' ?>>
+                                        <option value="<?= $cat['id'] ?>" <?= $course['category_id'] == $cat['id'] ? 'selected' : '' ?>>
                                             <?= htmlspecialchars($cat['name']) ?>
                                         </option>
                                         <?php endforeach; ?>
@@ -334,8 +334,8 @@ require_once __DIR__ . '/../includes/header.php';
                                     <label class="form-label">Level</label>
                                     <select name="level" class="form-select">
                                         <option value="beginner" <?= $course['level'] === 'beginner' ? 'selected' : '' ?>>Pemula</option>
-                                        <option value="intermediate" <?= $course['level'] === 'intermediate' ? 'selected' : '' ? >>Menengah</option>
-                                        <option value="advanced" <?= $course['level'] === 'advanced' ? 'selected' : '' ? >>Lanjutan</option>
+                                        <option value="intermediate" <?= $course['level'] === 'intermediate' ? 'selected' : '' ?>>Menengah</option>
+                                        <option value="advanced" <?= $course['level'] === 'advanced' ? 'selected' : '' ?>>Lanjutan</option>
                                     </select>
                                 </div>
                             </div>
@@ -343,7 +343,7 @@ require_once __DIR__ . '/../includes/header.php';
                             <div class="mb-3">
                                 <label class="form-label">Deskripsi Singkat</label>
                                 <textarea name="short_description" class="form-control" rows="2" maxlength="500"><?= htmlspecialchars($course['short_description']) ?></textarea>
-                                <small class="text-muted">Maks.  500 karakter</small>
+                                <small class="text-muted">Maks. 500 karakter</small>
                             </div>
                             
                             <div class="mb-3">
@@ -356,18 +356,18 @@ require_once __DIR__ . '/../includes/header.php';
                                 <?php if ($course['thumbnail']): ?>
                                 <div class="mb-2">
                                     <img src="<?= getCourseImage($course) ?>" class="img-fluid rounded" style="max-height: 150px;"
-                                         onerror="this. src='https://via.placeholder.com/750x422/4f46e5/ffffff?text=LGN+Course'">
+                                         onerror="this.src='https://via.placeholder.com/750x422/4f46e5/ffffff?text=LGN+Course'">
                                 </div>
                                 <?php endif; ?>
                                 <input type="file" name="thumbnail" class="form-control" accept="image/*">
-                                <small class="text-muted">Ukuran yang disarankan:  750x422 px (rasio 16:9)</small>
+                                <small class="text-muted">Ukuran yang disarankan: 750x422 px (rasio 16:9)</small>
                             </div>
                             
                             <div class="row">
                                 <div class="col-6 mb-3">
                                     <label class="form-label">Harga (Rp)</label>
                                     <input type="number" name="price" class="form-control" 
-                                           value="<?= $course['price'] ? >" min="0" step="1000">
+                                           value="<?= $course['price'] ?>" min="0" step="1000">
                                     <small class="text-muted">0 = Gratis</small>
                                 </div>
                                 <div class="col-6 mb-3">
@@ -392,7 +392,7 @@ require_once __DIR__ . '/../includes/header.php';
                             <div class="mb-3">
                                 <div class="form-check">
                                     <input type="checkbox" name="is_featured" class="form-check-input" id="isFeatured" 
-                                           <?= $course['is_featured'] ?  'checked' :  '' ?>>
+                                           <?= $course['is_featured'] ? 'checked' : '' ?>>
                                     <label class="form-check-label" for="isFeatured">
                                         <i class="bi bi-star-fill text-warning me-1"></i>Jadikan Kursus Unggulan (Featured)
                                     </label>
@@ -440,7 +440,6 @@ require_once __DIR__ . '/../includes/header.php';
                     </div>
                 </div>
             </div>
-            
             <!-- Curriculum -->
             <div class="col-lg-7">
                 <div class="card">
@@ -454,7 +453,7 @@ require_once __DIR__ . '/../includes/header.php';
                         <?php if (empty($sections)): ?>
                         <div class="text-center py-5 text-muted">
                             <i class="bi bi-folder-plus fs-1"></i>
-                            <p class="mt-2 mb-0">Belum ada materi.  Mulai dengan menambahkan section. </p>
+                            <p class="mt-2 mb-0">Belum ada materi. Mulai dengan menambahkan section.</p>
                         </div>
                         <?php else: ?>
                         <div class="accordion" id="curriculumAccordion">
@@ -471,7 +470,7 @@ require_once __DIR__ . '/../includes/header.php';
                                         </div>
                                     </button>
                                 </h2>
-                                <div id="section<?= $section['id'] ? >" class="accordion-collapse collapse <?= $index === 0 ? 'show' : '' ?>">
+                                <div id="section<?= $section['id'] ?>" class="accordion-collapse collapse <?= $index === 0 ? 'show' : '' ?>">
                                     <div class="accordion-body">
                                         <!-- Section Actions -->
                                         <div class="d-flex gap-2 mb-3">
@@ -499,8 +498,8 @@ require_once __DIR__ . '/../includes/header.php';
                                         <?php endif; ?>
                                         
                                         <?php if (empty($section['lessons'])): ?>
-                                        <p class="text-muted mb-0"><i class="bi bi-info-circle me-1"></i>Belum ada lesson di section ini. </p>
-                                        <?php else:  ?>
+                                        <p class="text-muted mb-0"><i class="bi bi-info-circle me-1"></i>Belum ada lesson di section ini.</p>
+                                        <?php else: ?>
                                         <ul class="list-group list-group-flush">
                                             <?php foreach ($section['lessons'] as $lesson): ?>
                                             <li class="list-group-item d-flex justify-content-between align-items-center px-0">
@@ -529,7 +528,7 @@ require_once __DIR__ . '/../includes/header.php';
                                                             onclick='openEditLessonModal(<?= json_encode($lesson) ?>)'>
                                                         <i class="bi bi-pencil"></i>
                                                     </button>
-                                                    <form method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus lesson ini? ')">
+                                                    <form method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus lesson ini?')">
                                                         <input type="hidden" name="action" value="delete_lesson">
                                                         <input type="hidden" name="lesson_id" value="<?= $lesson['id'] ?>">
                                                         <button type="submit" class="btn btn-sm btn-outline-danger">
@@ -662,7 +661,7 @@ require_once __DIR__ . '/../includes/header.php';
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Google Drive URL (opsional)</label>
                                 <input type="url" name="drive_url" class="form-control" 
-                                       placeholder="https://drive.google.com/file/d/... ">
+                                       placeholder="https://drive.google.com/file/d/...">
                             </div>
                         </div>
                     </div>
@@ -795,8 +794,8 @@ function toggleContentFields(mode) {
         videoFields.style.display = 'none';
         articleFields.style.display = 'block';
     } else {
-        videoFields. style.display = 'none';
-        articleFields.style. display = 'none';
+        videoFields.style.display = 'none';
+        articleFields.style.display = 'none';
     }
 }
 
