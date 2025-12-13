@@ -119,9 +119,13 @@ require_once __DIR__ . '/../includes/header.php';
                     </div>
                     
                     <div class="d-flex align-items-center mb-4">
-                        <img src="<?= $course['tutor_avatar'] ?: '/assets/images/default-avatar.png' ?>" 
+                        <img src="<?= getUserAvatar($course, 48) ?>" 
                              alt="<?= htmlspecialchars($course['tutor_name']) ?>"
-                             class="rounded-circle me-3" width="48" height="48" style="object-fit: cover;">
+                             class="rounded-circle me-3" 
+                             width="48" 
+                             height="48" 
+                             style="object-fit: cover;"
+                             onerror="this.src='https://ui-avatars.com/api/?name=Tutor&background=4f46e5&color=fff&size=48'">
                         <div>
                             <small class="text-white-50">Dibuat oleh</small>
                             <div class="fw-semibold"><?= htmlspecialchars($course['tutor_name']) ?></div>
@@ -256,9 +260,14 @@ require_once __DIR__ . '/../includes/header.php';
                         <div class="card-body">
                             <h4 class="fw-bold mb-4">Instruktur</h4>
                             <div class="d-flex">
-                                <img src="<?= $course['tutor_avatar'] ?: '/assets/images/default-avatar.png' ?>" 
+                                <!-- AVATAR TUTOR - GUNAKAN HELPER FUNCTION YANG SAMA -->
+                                <img src="<?= getUserAvatar($course, 100) ?>" 
                                      alt="<?= htmlspecialchars($course['tutor_name']) ?>"
-                                     class="rounded-circle me-4" width="100" height="100" style="object-fit: cover;">
+                                     class="rounded-circle me-4" 
+                                     width="100" 
+                                     height="100" 
+                                     style="object-fit: cover;"
+                                     onerror="this.src='https://ui-avatars.com/api/?name=Tutor&background=4f46e5&color=fff&size=100'">
                                 <div>
                                     <h5 class="fw-semibold mb-1"><?= htmlspecialchars($course['tutor_name']) ?></h5>
                                     <p class="text-muted mb-2">Instruktur</p>
@@ -285,22 +294,24 @@ require_once __DIR__ . '/../includes/header.php';
                             <p class="text-muted text-center py-4">Belum ada ulasan untuk kursus ini.</p>
                             <?php else: ?>
                                 <?php foreach ($reviews as $review): ?>
-                                <div class="review-card">
-                                    <div class="review-header">
-                                        <img src="<?= $review['user_avatar'] ?: '/assets/images/default-avatar.png' ?>" 
-                                             alt="<?= htmlspecialchars($review['user_name']) ?>"
-                                             class="review-avatar">
-                                        <div class="flex-grow-1">
-                                            <div class="fw-semibold"><?= htmlspecialchars($review['user_name']) ?></div>
-                                            <div class="d-flex align-items-center gap-2">
-                                                <?= renderStars($review['rating'], false) ?>
-                                                <span class="text-muted small"><?= timeAgo($review['created_at']) ?></span>
+                                    <div class="review-card">
+                                        <div class="review-header">
+                                            <!-- AVATAR REVIEWER - GUNAKAN HELPER FUNCTION -->
+                                            <img src="<?= getUserAvatar(['avatar' => $review['user_avatar'], 'name' => $review['user_name']], 48) ?>" 
+                                                 alt="<?= htmlspecialchars($review['user_name']) ?>"
+                                                 class="review-avatar"
+                                                 onerror="this.src='https://ui-avatars.com/api/?name=User&background=4f46e5&color=fff&size=48'">
+                                            <div class="flex-grow-1">
+                                                <div class="fw-semibold"><?= htmlspecialchars($review['user_name']) ?></div>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <?= renderStars($review['rating'], false) ?>
+                                                    <span class="text-muted small"><?= timeAgo($review['created_at']) ?></span>
+                                                </div>
                                             </div>
                                         </div>
+                                        <p class="review-content mb-0"><?= nl2br(htmlspecialchars($review['comment'])) ?></p>
                                     </div>
-                                    <p class="review-content mb-0"><?= nl2br(htmlspecialchars($review['comment'])) ?></p>
-                                </div>
-                                <?php endforeach; ?>
+                                    <?php endforeach; ?>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -311,14 +322,16 @@ require_once __DIR__ . '/../includes/header.php';
                     <div class="card sticky-top" style="top: 100px;">
                         <!-- Course Preview -->
                         <?php if ($course['preview_video_id']): ?>
-                        <div class="video-player-wrapper">
-                            <div class="video-player-container">
-                                <iframe src="https://drive.google.com/file/d/1Ab9w4BlF31K9by-Hyeq2jA5R_hy4h57s/view<?= $course['preview_video_id'] ?>/preview" allowfullscreen></iframe>
+                            <div class="video-player-wrapper">
+                                <div class="video-player-container">
+                                    <iframe src="https://drive.google.com/file/d/<?= $course['preview_video_id'] ?>/preview" allowfullscreen></iframe>
+                                </div>
                             </div>
-                        </div>
                         <?php else: ?>
-                        <img src="<?= $course['thumbnail'] ?: '/assets/images/course-placeholder.jpg' ?>" 
-                             class="card-img-top" alt="<?= htmlspecialchars($course['title']) ?>">
+                        <img src="<?= getCourseImage($course) ?>" 
+                                 class="card-img-top" 
+                                 alt="<?= htmlspecialchars($course['title']) ?>"
+                                 onerror="this.src='https://via.placeholder.com/750x422/4f46e5/ffffff?text=LGN+Course'">
                         <?php endif; ?>
                         
                         <div class="card-body">
@@ -468,5 +481,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
 
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>
