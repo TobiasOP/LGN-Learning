@@ -1,15 +1,15 @@
-<? php
+<?php
 // LGN E-Learning - Database Import untuk Railway
 // Jalankan SEKALI:  https://your-app.railway.app/_setup_database.php
 
-require_once 'config/database. php';
+require_once 'config/database.php';
 
 $database = new Database();
 $db = $database->getConnection();
 
 $flagFile = '. db_imported';
 
-// Sudah pernah dijalankan?
+// Sudah pernah dijalankan? 
 if (file_exists($flagFile)) {
     echo "<! DOCTYPE html><html><head><title>Setup Done</title>
     <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet'>
@@ -17,7 +17,7 @@ if (file_exists($flagFile)) {
     <div class='container py-5'><div class='row justify-content-center'><div class='col-md-6'>
     <div class='card shadow text-center p-5'>
     <h1 class='text-success'>✅ Database Already Imported</h1>
-    <p class='text-muted'>Setup sudah selesai sebelumnya. </p>
+    <p class='text-muted'>Setup sudah selesai sebelumnya.</p>
     <a href='/' class='btn btn-primary btn-lg mt-3'>Buka LGN E-Learning</a>
     </div></div></div></div></body></html>";
     exit;
@@ -25,7 +25,7 @@ if (file_exists($flagFile)) {
 
 // File SQL tidak ada? 
 if (!file_exists('database.sql')) {
-    echo "<! DOCTYPE html><html><head><title>File Not Found</title>
+    echo "<!DOCTYPE html><html><head><title>File Not Found</title>
     <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet'>
     </head><body class='bg-light'>
     <div class='container py-5'><div class='row justify-content-center'><div class='col-md-6'>
@@ -58,8 +58,8 @@ if (!file_exists('database.sql')) {
     <div class="row justify-content-center">
         <div class="col-lg-8">
             <div class="card">
-                <div class="card-header text-center text-white" style="background: linear-gradient(135deg, #4f46e5, #7c3aed);">
-                    <h3 class="mb-0 py-2">🚀 LGN Database Import</h3>
+                <div class="card-header text-center text-white py-3" style="background:  linear-gradient(135deg, #4f46e5, #7c3aed);">
+                    <h3 class="mb-0">🚀 LGN Database Import</h3>
                 </div>
                 <div class="card-body p-4">
                     <? php
@@ -68,7 +68,7 @@ if (!file_exists('database.sql')) {
                     // Bersihkan SQL
                     $sql = preg_replace('/--.*\n/', "\n", $sql);
                     $sql = preg_replace('/\/\*.*?\*\//s', '', $sql);
-                    $sql = preg_replace('/USE\s+`?[\w]+`?\s*;/i', '', $sql);
+                    $sql = preg_replace('/USE\s+`? [\w]+`?\s*;/i', '', $sql);
                     
                     $queries = array_filter(array_map('trim', explode(';', $sql)));
                     $total = count($queries);
@@ -92,7 +92,7 @@ if (!file_exists('database.sql')) {
                             $db->exec($query);
                             $success++;
                             $preview = htmlspecialchars(substr($query, 0, 60));
-                            echo "<div class='log-success'>✓ #$num:  $preview... </div>";
+                            echo "<div class='log-success'>✓ #$num: $preview... </div>";
                         } catch (PDOException $e) {
                             $errors[] = "#$num: " . $e->getMessage();
                             echo "<div class='log-error'>✗ #$num: " . htmlspecialchars($e->getMessage()) . "</div>";
@@ -121,7 +121,7 @@ if (!file_exists('database.sql')) {
                         echo "<div class='alert alert-warning mt-3'>";
                         echo "<strong>Beberapa error:</strong><ul class='mb-0 small'>";
                         foreach (array_slice($errors, 0, 5) as $err) {
-                            echo "<li>" . htmlspecialchars($err) . "</li>";
+                            echo "<li>" .  htmlspecialchars($err) . "</li>";
                         }
                         echo "</ul></div>";
                     }
