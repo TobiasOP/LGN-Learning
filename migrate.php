@@ -10,7 +10,7 @@ if (!isLoggedIn() || $_SESSION['user_role'] !== 'admin') {
 }
 
 // Secret key untuk keamanan (ganti dengan string random Anda)
-$secretKey = 'Halo123';
+$secretKey = 'LGN_mig_2024_a8f3h2k9x7m4';
 if (($_GET['key'] ?? '') !== $secretKey) {
     die('Invalid key. Usage: migrate.php?key=your-secret-migration-key-2024');
 }
