@@ -1,0 +1,8 @@
+# Database import flag
+.db_imported
+
+# Environment
+.env
+
+# System
+.DS_Store
