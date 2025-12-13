@@ -10,7 +10,7 @@ requireRole('admin');
 $db = getDB();
 
 // Pagination
-$page = max(1, intval($_GET['page'] ??  1));
+$page = max(1, intval($_GET['page'] ?? 1));
 $limit = 20;
 $offset = ($page - 1) * $limit;
 
@@ -24,7 +24,7 @@ $where = "1=1";
 $params = [];
 
 if ($search) {
-    $where .= " AND (c.title LIKE ?  OR c.description LIKE ?)";
+    $where .= " AND (c.title LIKE ? OR c.description LIKE ?)";
     $params[] = "%$search%";
     $params[] = "%$search%";
 }
@@ -59,8 +59,8 @@ $stmt = $db->prepare("
            (SELECT COUNT(*) FROM enrollments WHERE course_id = c.id) as enrollment_count,
            (SELECT COUNT(*) FROM lessons WHERE course_id = c.id) as lesson_count
     FROM courses c
-    LEFT JOIN categories cat ON c.category_id = cat. id
-    LEFT JOIN users u ON c. tutor_id = u.id
+    LEFT JOIN categories cat ON c.category_id = cat.id
+    LEFT JOIN users u ON c.tutor_id = u.id
     WHERE $where
     ORDER BY c.created_at DESC
     LIMIT $limit OFFSET $offset
@@ -97,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             case 'toggle_publish':
                 $stmt = $db->prepare("UPDATE courses SET is_published = NOT is_published WHERE id = ?");
                 $stmt->execute([$courseId]);
-                redirect('/admin/courses. php', 'Status publikasi kursus berhasil diubah', 'success');
+                redirect('/admin/courses.php', 'Status publikasi kursus berhasil diubah', 'success');
                 break;
                 
             case 'toggle_featured':
@@ -111,12 +111,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt = $db->prepare("SELECT COUNT(*) FROM enrollments WHERE course_id = ?");
                 $stmt->execute([$courseId]);
                 if ($stmt->fetchColumn() > 0) {
-                    redirect('/admin/courses. php', 'Tidak dapat menghapus kursus yang memiliki pendaftaran', 'error');
+                    redirect('/admin/courses.php', 'Tidak dapat menghapus kursus yang memiliki pendaftaran', 'error');
                 } else {
                     // Delete related data first
                     $db->prepare("DELETE FROM lessons WHERE course_id = ?")->execute([$courseId]);
                     $db->prepare("DELETE FROM courses WHERE id = ?")->execute([$courseId]);
-                    redirect('/admin/courses. php', 'Kursus berhasil dihapus', 'success');
+                    redirect('/admin/courses.php', 'Kursus berhasil dihapus', 'success');
                 }
                 break;
         }
@@ -185,24 +185,24 @@ require_once __DIR__ . '/../includes/header.php';
                         <select name="category" class="form-select">
                             <option value="">Semua Kategori</option>
                             <?php foreach ($categories as $cat): ?>
-                            <option value="<? = $cat['id'] ?>" <?= $category == $cat['id'] ? 'selected' : '' ?>>
+                            <option value="<?= $cat['id'] ?>" <?= $category == $cat['id'] ? 'selected' : '' ?>>
                                 <?= htmlspecialchars($cat['name']) ?>
                             </option>
-                            <? php endforeach; ?>
+                            <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="col-md-2">
                         <select name="status" class="form-select">
                             <option value="">Semua Status</option>
-                            <option value="published" <? = $status === 'published' ?  'selected' :  '' ?>>Dipublikasikan</option>
-                            <option value="draft" <?= $status === 'draft' ? 'selected' : '' ? >>Draft</option>
+                            <option value="published" <?= $status === 'published' ? 'selected' : '' ?>>Dipublikasikan</option>
+                            <option value="draft" <?= $status === 'draft' ? 'selected' : '' ?>>Draft</option>
                         </select>
                     </div>
                     <div class="col-md-2">
                         <select name="tutor" class="form-select">
                             <option value="">Semua Tutor</option>
                             <?php foreach ($tutors as $t): ?>
-                            <option value="<? = $t['id'] ?>" <?= $tutor == $t['id'] ?  'selected' :  '' ?>>
+                            <option value="<?= $t['id'] ?>" <?= $tutor == $t['id'] ? 'selected' : '' ?>>
                                 <?= htmlspecialchars($t['name']) ?>
                             </option>
                             <?php endforeach; ?>
@@ -241,19 +241,19 @@ require_once __DIR__ . '/../includes/header.php';
                                 </td>
                             </tr>
                             <?php else: ?>
-                            <? php foreach ($courses as $course): ?>
+                            <?php foreach ($courses as $course): ?>
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <img src="<?= $course['thumbnail'] ?  '/' . $course['thumbnail'] : '/assets/images/default-course.png' ?>" 
-                                             class="rounded me-3" width="60" height="40" style="object-fit:  cover;">
+                                        <img src="<?= $course['thumbnail'] ? '/' . $course['thumbnail'] : '/assets/images/default-course.png' ?>" 
+                                             class="rounded me-3" width="60" height="40" style="object-fit: cover;">
                                         <div>
                                             <div class="fw-medium text-truncate" style="max-width: 200px;">
-                                                <? = htmlspecialchars($course['title']) ?>
+                                                <?= htmlspecialchars($course['title']) ?>
                                             </div>
                                             <small class="text-muted">
-                                                <code><? = $course['slug'] ?></code>
-                                                <? php if ($course['is_featured']): ?>
+                                                <code><?= $course['slug'] ?></code>
+                                                <?php if ($course['is_featured']): ?>
                                                 <span class="badge bg-warning text-dark ms-1">Featured</span>
                                                 <?php endif; ?>
                                             </small>
@@ -261,20 +261,20 @@ require_once __DIR__ . '/../includes/header.php';
                                     </div>
                                 </td>
                                 <td>
-                                    <? php if ($course['category_name']): ?>
+                                    <?php if ($course['category_name']): ?>
                                     <span class="badge bg-secondary"><?= htmlspecialchars($course['category_name']) ?></span>
                                     <?php else: ?>
                                     <span class="text-muted">-</span>
                                     <?php endif; ?>
                                 </td>
-                                <td><? = htmlspecialchars($course['tutor_name'] ??  '-') ?></td>
+                                <td><?= htmlspecialchars($course['tutor_name'] ?? '-') ?></td>
                                 <td>
-                                    <? php if ($course['price'] > 0): ?>
-                                    <div><? = formatCurrency($course['price']) ?></div>
-                                    <? php if ($course['discount_price']): ?>
+                                    <?php if ($course['price'] > 0): ?>
+                                    <div><?= formatCurrency($course['price']) ?></div>
+                                    <?php if ($course['discount_price']): ?>
                                     <small class="text-success"><?= formatCurrency($course['discount_price']) ?></small>
                                     <?php endif; ?>
-                                    <? php else: ?>
+                                    <?php else: ?>
                                     <span class="badge bg-success">Gratis</span>
                                     <?php endif; ?>
                                 </td>
@@ -285,8 +285,8 @@ require_once __DIR__ . '/../includes/header.php';
                                     <span class="badge bg-primary"><?= $course['enrollment_count'] ?> siswa</span>
                                 </td>
                                 <td>
-                                    <span class="badge bg-<? = $course['is_published'] ? 'success' : 'warning text-dark' ?>">
-                                        <?= $course['is_published'] ?  'Published' : 'Draft' ?>
+                                    <span class="badge bg-<?= $course['is_published'] ? 'success' : 'warning text-dark' ?>">
+                                        <?= $course['is_published'] ? 'Published' : 'Draft' ?>
                                     </span>
                                 </td>
                                 <td>
@@ -296,12 +296,12 @@ require_once __DIR__ . '/../includes/header.php';
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <a href="/course/<? = $course['slug'] ?>" class="dropdown-item" target="_blank">
+                                                <a href="/course/<?= $course['slug'] ?>" class="dropdown-item" target="_blank">
                                                     <i class="bi bi-eye me-2"></i>Lihat Kursus
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="/tutor/course-edit. php?id=<? = $course['id'] ?>" class="dropdown-item">
+                                                <a href="/tutor/course-edit.php?id=<?= $course['id'] ?>" class="dropdown-item">
                                                     <i class="bi bi-pencil me-2"></i>Edit Kursus
                                                 </a>
                                             </li>
@@ -316,8 +316,8 @@ require_once __DIR__ . '/../includes/header.php';
                                                     <input type="hidden" name="action" value="toggle_publish">
                                                     <input type="hidden" name="course_id" value="<?= $course['id'] ?>">
                                                     <button type="submit" class="dropdown-item">
-                                                        <i class="bi bi-<? = $course['is_published'] ? 'eye-slash' : 'eye' ?> me-2"></i>
-                                                        <? = $course['is_published'] ? 'Unpublish' : 'Publish' ?>
+                                                        <i class="bi bi-<?= $course['is_published'] ? 'eye-slash' : 'eye' ?> me-2"></i>
+                                                        <?= $course['is_published'] ? 'Unpublish' : 'Publish' ?>
                                                     </button>
                                                 </form>
                                             </li>
@@ -326,15 +326,15 @@ require_once __DIR__ . '/../includes/header.php';
                                                     <input type="hidden" name="action" value="toggle_featured">
                                                     <input type="hidden" name="course_id" value="<?= $course['id'] ?>">
                                                     <button type="submit" class="dropdown-item">
-                                                        <i class="bi bi-star<? = $course['is_featured'] ? '-fill' : '' ?> me-2"></i>
+                                                        <i class="bi bi-star<?= $course['is_featured'] ? '-fill' : '' ?> me-2"></i>
                                                         <?= $course['is_featured'] ? 'Hapus Featured' : 'Jadikan Featured' ?>
                                                     </button>
                                                 </form>
                                             </li>
-                                            <? php if ($course['enrollment_count'] == 0): ?>
+                                            <?php if ($course['enrollment_count'] == 0): ?>
                                             <li><hr class="dropdown-divider"></li>
                                             <li>
-                                                <form method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus kursus ini?  Semua lessons akan ikut terhapus.')">
+                                                <form method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus kursus ini? Semua lessons akan ikut terhapus.')">
                                                     <input type="hidden" name="action" value="delete">
                                                     <input type="hidden" name="course_id" value="<?= $course['id'] ?>">
                                                     <button type="submit" class="dropdown-item text-danger">
@@ -360,7 +360,7 @@ require_once __DIR__ . '/../includes/header.php';
                     <ul class="pagination justify-content-center mb-0">
                         <?php if ($page > 1): ?>
                         <li class="page-item">
-                            <a class="page-link" href="?<? = http_build_query(array_merge($_GET, ['page' => $page - 1])) ?>">
+                            <a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['page' => $page - 1])) ?>">
                                 <i class="bi bi-chevron-left"></i>
                             </a>
                         </li>
@@ -377,26 +377,26 @@ require_once __DIR__ . '/../includes/header.php';
                         <?php if ($startPage > 2): ?>
                         <li class="page-item disabled"><span class="page-link">...</span></li>
                         <?php endif; ?>
-                        <? php endif; ?>
+                        <?php endif; ?>
                         
                         <?php for ($i = $startPage; $i <= $endPage; $i++): ?>
                         <li class="page-item <?= $i === $page ? 'active' : '' ?>">
-                            <a class="page-link" href="? <?= http_build_query(array_merge($_GET, ['page' => $i])) ?>"><?= $i ?></a>
+                            <a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['page' => $i])) ?>"><?= $i ?></a>
                         </li>
                         <?php endfor; ?>
                         
                         <?php if ($endPage < $totalPages): ?>
-                        <? php if ($endPage < $totalPages - 1): ?>
+                        <?php if ($endPage < $totalPages - 1): ?>
                         <li class="page-item disabled"><span class="page-link">...</span></li>
                         <?php endif; ?>
                         <li class="page-item">
-                            <a class="page-link" href="?<? = http_build_query(array_merge($_GET, ['page' => $totalPages])) ?>"><? = $totalPages ? ></a>
+                            <a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['page' => $totalPages])) ?>"><?= $totalPages ?></a>
                         </li>
                         <?php endif; ?>
                         
                         <?php if ($page < $totalPages): ?>
                         <li class="page-item">
-                            <a class="page-link" href="?<? = http_build_query(array_merge($_GET, ['page' => $page + 1])) ?>">
+                            <a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['page' => $page + 1])) ?>">
                                 <i class="bi bi-chevron-right"></i>
                             </a>
                         </li>
@@ -409,4 +409,4 @@ require_once __DIR__ . '/../includes/header.php';
     </div>
 </main>
 
-<?php require_once __DIR__ .  '/../includes/footer.php'; ?>
+<?php require_once __DIR__ . '/../includes/footer.php'; ?>
