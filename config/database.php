@@ -10,10 +10,8 @@ class Database {
     public $conn;
 
     public function __construct() {
-        // Cek Railway Environment Variables
-        // Jika di Railway, gunakan env vars
-        // Jika di local, gunakan default localhost
-        
+        // Railway Environment Variables (auto-set by Railway)
+        // Local fallback untuk development
         $this->host     = getenv('MYSQLHOST')     ?: 'localhost';
         $this->port     = getenv('MYSQLPORT')     ?: '3306';
         $this->db_name  = getenv('MYSQLDATABASE') ?: 'lgn_elearning';
@@ -35,13 +33,13 @@ class Database {
                 $this->username,
                 $this->password,
                 [
-                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                    PDO:: ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                    PDO:: ATTR_ERRMODE => PDO:: ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO:: FETCH_ASSOC,
                     PDO::ATTR_EMULATE_PREPARES => false
                 ]
             );
         } catch(PDOException $e) {
-            die("Connection Error: " .  $e->getMessage());
+            die("Connection Error: " . $e->getMessage());
         }
 
         return $this->conn;
