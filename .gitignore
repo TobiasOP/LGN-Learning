@@ -6,3 +6,7 @@
 
 # System
 .DS_Store
+Thumbs. db
+
+# Uploads (jika ada)
+assets/uploads/
