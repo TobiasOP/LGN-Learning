@@ -486,4 +486,77 @@ function setSetting($key, $value) {
         ON DUPLICATE KEY UPDATE value = VALUES(value)
     ");
     return $stmt->execute([$key, $value]);
+
+}
+
+
+function getCourseImage($course, $checkFileExists = true) {
+    // If $course is string (just thumbnail path)
+    if (is_string($course)) {
+        $thumbnail = $course;
+        $title = 'Course';
+    } else {
+        // If $course is array
+        $thumbnail = $course['thumbnail'] ?? '';
+        $title = $course['title'] ?? 'Course';
+    }
+    
+    // Check if thumbnail exists
+    if (!empty($thumbnail)) {
+        // Remove leading slash if exists
+        $cleanPath = ltrim($thumbnail, '/');
+        
+        if ($checkFileExists) {
+            // Check if file exists on server
+            if (file_exists($_SERVER['DOCUMENT_ROOT'] . '/' . $cleanPath)) {
+                return '/' . $cleanPath;
+            }
+        } else {
+            // Trust the path without checking (for external URLs)
+            if (filter_var($thumbnail, FILTER_VALIDATE_URL)) {
+                return $thumbnail;
+            }
+            return '/' . $cleanPath;
+        }
+    }
+    
+    // Fallback to placeholder with course title
+    $placeholderText = urlencode(substr($title, 0, 30));
+    return "https://via.placeholder.com/750x422/4f46e5/ffffff?text={$placeholderText}";
+}
+
+/**
+ * Get user avatar URL with fallback
+ * @param array|string $user User data array or avatar path
+ * @param int $size Avatar size (default: 128)
+ * @return string Avatar URL
+ */
+function getUserAvatar($user, $size = 128) {
+    // If $user is string (just avatar path)
+    if (is_string($user)) {
+        $avatar = $user;
+        $name = 'User';
+    } else {
+        // If $user is array
+        $avatar = $user['avatar'] ?? $user['tutor_avatar'] ?? '';
+        $name = $user['name'] ?? $user['tutor_name'] ?? 'User';
+    }
+    
+    // Check if avatar exists
+    if (!empty($avatar)) {
+        $cleanPath = ltrim($avatar, '/');
+        
+        if (file_exists($_SERVER['DOCUMENT_ROOT'] . '/' . $cleanPath)) {
+            return '/' . $cleanPath;
+        }
+        
+        // If it's external URL
+        if (filter_var($avatar, FILTER_VALIDATE_URL)) {
+            return $avatar;
+        }
+    }
+    
+    // Fallback to UI Avatars
+    $initials = urlencode($name);
+    return "https://ui-avatars.com/api/?name={$initials}&background=4f46e5&color=fff&size={$size}";
 }
