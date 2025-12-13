@@ -15,7 +15,7 @@ class Database {
         $this->host     = getenv('MYSQLHOST')     ?: 'railway';
         $this->port     = getenv('MYSQLPORT')     ?: '3306';
         $this->db_name  = getenv('MYSQLDATABASE') ?: 'railway';
-        $this->username = getenv('MYSQLUSER')     ?: 'root';
+        // $this->username = getenv('MYSQLUSER')     ?: 'root';
         $this->password = getenv('MYSQLPASSWORD') ?: '';
     }
 
@@ -45,4 +45,5 @@ class Database {
         return $this->conn;
     }
 }
+
 
