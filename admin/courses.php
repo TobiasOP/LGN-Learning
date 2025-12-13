@@ -326,7 +326,7 @@ require_once __DIR__ . '/../includes/header.php';
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="/pages/tutor/edit_course.php?id=<?= $course['id'] ?>" class="dropdown-item">
+                                                <a href="/admin/edit_course.php? id=<?= $course['id'] ? >" class="dropdown-item">
                                                     <i class="bi bi-pencil me-2"></i>Edit Kursus
                                                 </a>
                                             </li>
