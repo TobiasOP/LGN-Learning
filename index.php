@@ -223,11 +223,6 @@ require_once 'includes/header.php';
                 <div class="col-lg-3 col-md-6">
                     <div class="card course-card h-100">
                         <div class="card-img-wrapper">
-                            <?php 
-                            $thumbnailUrl = $course['thumbnail'] && file_exists(__DIR__ . '/' . $course['thumbnail']) 
-                                ? '/' . $course['thumbnail'] 
-                                : 'https://via.placeholder.com/750x422/4f46e5/ffffff?text=' . urlencode(substr($course['title'], 0, 20));
-                            ?>
                             <img src="<?= getCourseImage($course) ?>" 
                                  class="card-img-top" 
                                  alt="<?= htmlspecialchars($course['title']) ?>"
@@ -434,3 +429,4 @@ require_once 'includes/header.php';
 </main>
 
 <?php require_once 'includes/footer.php'; ?>
+
