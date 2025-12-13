@@ -12,9 +12,9 @@ class Database {
     public function __construct() {
         // Railway Environment Variables (auto-set by Railway)
         // Local fallback untuk development
-        $this->host     = getenv('MYSQLHOST')     ?: 'localhost';
+        $this->host     = getenv('MYSQLHOST')     ?: 'railway';
         $this->port     = getenv('MYSQLPORT')     ?: '3306';
-        $this->db_name  = getenv('MYSQLDATABASE') ?: 'lgn_elearning';
+        $this->db_name  = getenv('MYSQLDATABASE') ?: 'railway';
         $this->username = getenv('MYSQLUSER')     ?: 'root';
         $this->password = getenv('MYSQLPASSWORD') ?: '';
     }
@@ -45,3 +45,4 @@ class Database {
         return $this->conn;
     }
 }
+
