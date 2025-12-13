@@ -488,33 +488,26 @@ function setSetting($key, $value) {
     return $stmt->execute([$key, $value]);
 
 }
-
-function getCourseImage($course, $checkFileExists = true) {
-    // If $course is string (just thumbnail path)
-    if (is_string($course)) {
-        $thumbnail = $course;
-        $title = 'Course';
-    } else {
-        // If $course is array
-        $thumbnail = $course['thumbnail'] ?? '';
-        $title = $course['title'] ?? 'Course';
-    }
+/**
+ * Get course thumbnail URL with consistent fallback
+ */
+function getCourseImage($course) {
+    $thumbnail = is_array($course) ? ($course['thumbnail'] ?? '') : $course;
+    $title = is_array($course) ? ($course['title'] ?? 'Course') : 'Course';
     
-    // Check if thumbnail exists
+    // If thumbnail path exists and not empty
     if (!empty($thumbnail)) {
-        // Remove leading slash if exists
+        // Remove leading slash
         $cleanPath = ltrim($thumbnail, '/');
         
-        if ($checkFileExists) {
-            // Check if file exists on server
-            if (file_exists($_SERVER['DOCUMENT_ROOT'] . '/' . $cleanPath)) {
-                return '/' . $cleanPath;
-            }
-        } else {
-            // Trust the path without checking (for external URLs)
-            if (filter_var($thumbnail, FILTER_VALIDATE_URL)) {
-                return $thumbnail;
-            }
+        // Check if it's external URL
+        if (filter_var($thumbnail, FILTER_VALIDATE_URL)) {
+            return $thumbnail;
+        }
+        
+        // Check if file exists on server
+        $fullPath = $_SERVER['DOCUMENT_ROOT'] . '/' . $cleanPath;
+        if (file_exists($fullPath)) {
             return '/' . $cleanPath;
         }
     }
@@ -525,37 +518,25 @@ function getCourseImage($course, $checkFileExists = true) {
 }
 
 /**
- * Get user avatar URL with fallback
- * @param array|string $user User data array or avatar path
- * @param int $size Avatar size (default: 128)
- * @return string Avatar URL
+ * Get user avatar URL with consistent fallback
  */
 function getUserAvatar($user, $size = 128) {
-    // If $user is string (just avatar path)
-    if (is_string($user)) {
-        $avatar = $user;
-        $name = 'User';
-    } else {
-        // If $user is array
-        $avatar = $user['avatar'] ?? $user['tutor_avatar'] ?? '';
-        $name = $user['name'] ?? $user['tutor_name'] ?? 'User';
-    }
+    $avatar = is_array($user) ? ($user['avatar'] ?? $user['tutor_avatar'] ?? '') : $user;
+    $name = is_array($user) ? ($user['name'] ?? $user['tutor_name'] ?? 'User') : 'User';
     
-    // Check if avatar exists
     if (!empty($avatar)) {
         $cleanPath = ltrim($avatar, '/');
         
-        if (file_exists($_SERVER['DOCUMENT_ROOT'] . '/' . $cleanPath)) {
-            return '/' . $cleanPath;
-        }
-        
-        // If it's external URL
         if (filter_var($avatar, FILTER_VALIDATE_URL)) {
             return $avatar;
         }
+        
+        $fullPath = $_SERVER['DOCUMENT_ROOT'] . '/' . $cleanPath;
+        if (file_exists($fullPath)) {
+            return '/' . $cleanPath;
+        }
     }
     
-    // Fallback to UI Avatars
     $initials = urlencode($name);
     return "https://ui-avatars.com/api/?name={$initials}&background=4f46e5&color=fff&size={$size}";
 }
@@ -577,3 +558,4 @@ function getCategoryIcon($category) {
 function getCategoryColor($category) {
     return $category['color'] ?? '#4f46e5';
 }
+
