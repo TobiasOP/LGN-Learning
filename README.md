@@ -12,7 +12,7 @@
 
 ## 🔗 Demo & Repository
 
-- **Live Demo**: [https://lgn-learning.up.railway.app](https://lgn-learning.up.railway.app)
+- **Live Demo**: [https://lgn-learning-production.up.railway.app/](https://lgn-learning-production.up.railway.app/)
 - **GitHub Repository**: [TobiasOP/LGN-Learning](https://github.com/TobiasOP/LGN-Learning)
 - **Deployment Platform**: Railway
 - **Database**:  MySQL on Railway
@@ -127,7 +127,7 @@ Berikut adalah README.md lengkap untuk dokumentasi proyek LGN-Learning:
 
 ## 🔗 Demo & Repository
 
-- **Live Demo**: [https://lgn-learning.up.railway.app](https://lgn-learning.up.railway.app)
+- **Live Demo**: [https://lgn-learning-production.up.railway.app/](https://lgn-learning-production.up.railway.app/)
 - **GitHub Repository**: [TobiasOP/LGN-Learning](https://github.com/TobiasOP/LGN-Learning)
 - **Deployment Platform**: Railway
 - **Database**:  MySQL on Railway
@@ -1546,4 +1546,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Made with ❤️ by LGN Development Team
 
-[Live Demo](https://lgn-learning.up.railway.app) • [Documentation](https://github.com/TobiasOP/LGN-Learning) •
+[Live Demo](https://lgn-learning-production.up.railway.app/) • [Documentation](https://github.com/TobiasOP/LGN-Learning) •
