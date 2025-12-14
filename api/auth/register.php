@@ -88,7 +88,8 @@ function handleSendVerification($db, $data) {
         VALUES (?, ?, ?, ?, ?, ?)
     ");
     $stmt->execute([$name, $email, $hashedPassword, $role, $hashedCode, $expiresAt]);
-    
+
+    $emailSent = sendVerificationEmail($email, $name, $code);
     
     if (!$emailSent) {
         error_log("Failed to send verification email to: " . $email);
@@ -273,4 +274,5 @@ function handleDirectRegistration($db, $data) {
         ]
     ]);
 }
+
 
