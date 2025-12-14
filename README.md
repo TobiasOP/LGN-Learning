@@ -25,6 +25,7 @@
 * **GitHub Repository**: [TobiasOP/LGN-Learning](https://github.com/TobiasOP/LGN-Learning)
 * **Deployment Platform**: Railway
 * **Database**: MySQL on Railway
+* **Link Video Demo**: [https://youtu.be/sk8x6y5LfRs](https://youtu.be/sk8x6y5LfRs)
 
 ---
 
@@ -1586,6 +1587,7 @@ Made with ❤️ by LGN Development Team
 [Live Demo](https://lgn-learning-production.up.railway.app/) • [Documentation](https://github.com/TobiasOP/LGN-Learning)
 
 </div>
+
 
 
 
