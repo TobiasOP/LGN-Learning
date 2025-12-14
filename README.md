@@ -1,7 +1,7 @@
 # KELOMPOK : 
 | Name | NRP |
 | ---- | --- |
-| Tobias Purba | 5025241025 |
+| Tobias Orlando Purba | 5025241025 |
 | Mahendra Agung Darmawan | 5025241032 |
 | Agil Lukman Hakim Muchdi  | 5025241037 |
 
@@ -1586,6 +1586,7 @@ Made with ❤️ by LGN Development Team
 [Live Demo](https://lgn-learning-production.up.railway.app/) • [Documentation](https://github.com/TobiasOP/LGN-Learning)
 
 </div>
+
 
 
 
