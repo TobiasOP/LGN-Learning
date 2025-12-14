@@ -89,8 +89,6 @@ function handleSendVerification($db, $data) {
     ");
     $stmt->execute([$name, $email, $hashedPassword, $role, $hashedCode, $expiresAt]);
     
-    // Send verification email
-    $emailSent = sendVerificationEmail($email, $name, $code);
     
     if (!$emailSent) {
         error_log("Failed to send verification email to: " . $email);
@@ -276,67 +274,3 @@ function handleDirectRegistration($db, $data) {
     ]);
 }
 
-/**
- * Send verification email
- */
-function sendVerificationEmail($to, $name, $code) {
-    $subject = 'Verifikasi Email - LGN E-Learning';
-    
-    $message = "
-    <html>
-    <head>
-        <style>
-            body { font-family: 'Poppins', Arial, sans-serif; line-height: 1.6; color: #333; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
-            .content { background: #f8fafc; padding: 30px; border-radius: 0 0 10px 10px; }
-            .code { font-size: 36px; font-weight: bold; letter-spacing: 10px; color: #4f46e5; text-align: center; padding: 25px; background: white; border-radius: 10px; margin: 20px 0; border: 2px dashed #e2e8f0; }
-            .footer { text-align: center; margin-top: 20px; color: #64748b; font-size: 12px; }
-            .highlight { background: #fef3c7; padding: 15px; border-radius: 8px; border-left: 4px solid #f59e0b; }
-        </style>
-    </head>
-    <body>
-        <div class='container'>
-            <div class='header'>
-                <h1 style='margin: 0; font-size: 28px;'>LGN E-Learning</h1>
-                <p style='margin: 10px 0 0 0; opacity: 0.9;'>Verifikasi Email Anda</p>
-            </div>
-            <div class='content'>
-                <p>Halo <strong>{$name}</strong>! 👋</p>
-                <p>Terima kasih telah mendaftar di LGN E-Learning. Untuk menyelesaikan pendaftaran, masukkan kode verifikasi berikut:</p>
-                
-                <div class='code'>{$code}</div>
-                
-                <div class='highlight'>
-                    <strong>⏰ Kode ini akan kadaluarsa dalam 15 menit.</strong>
-                </div>
-                
-                <p style='margin-top: 20px;'>Jika Anda tidak mendaftar di LGN, abaikan email ini.</p>
-                
-                <hr style='border: none; border-top: 1px solid #e2e8f0; margin: 25px 0;'>
-                
-                <p style='color: #64748b; font-size: 13px;'>
-                    <strong>Tips Keamanan:</strong><br>
-                    • Jangan bagikan kode ini kepada siapapun<br>
-                    • Tim LGN tidak akan pernah meminta kode verifikasi Anda
-                </p>
-            </div>
-            <div class='footer'>
-                <p>© " . date('Y') . " LGN E-Learning. All rights reserved.</p>
-                <p>Platform E-Learning Terbaik di Indonesia</p>
-            </div>
-        </div>
-    </body>
-    </html>
-    ";
-    
-    $headers = [
-        'MIME-Version: 1.0',
-        'Content-type: text/html; charset=UTF-8',
-        'From: LGN E-Learning <noreply@lgn.com>',
-        'Reply-To: support@lgn.com',
-        'X-Mailer: PHP/' . phpversion()
-    ];
-    
-    return @mail($to, $subject, $message, implode("\r\n", $headers));
-}
