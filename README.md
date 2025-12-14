@@ -1362,7 +1362,7 @@ function sendVerificationEmail($to, $name, $code)
 
 ## 👥 Pembagian Jobdesk
 
-*(Belum diisi – bisa diisi sesuai struktur tim: PM, Backend, Frontend, QA, dsb.)*
+
 
 ---
 
@@ -1575,4 +1575,5 @@ Made with ❤️ by LGN Development Team
 [Live Demo](https://lgn-learning-production.up.railway.app/) • [Documentation](https://github.com/TobiasOP/LGN-Learning)
 
 </div>
+
 
