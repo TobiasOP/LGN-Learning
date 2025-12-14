@@ -1362,7 +1362,9 @@ function sendVerificationEmail($to, $name, $code)
 
 ## 👥 Pembagian Jobdesk
 
+---
 
+Semua pekerjaan dibagi sama rata untuk penilaian dibagi secara rata dan semuanya saling membantu baik di Frontend, Backend, maupun database bila mengalami kesulitan atau bug
 
 ---
 
@@ -1575,5 +1577,6 @@ Made with ❤️ by LGN Development Team
 [Live Demo](https://lgn-learning-production.up.railway.app/) • [Documentation](https://github.com/TobiasOP/LGN-Learning)
 
 </div>
+
 
 
