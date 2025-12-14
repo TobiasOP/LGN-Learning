@@ -1538,12 +1538,6 @@ Password: password
 
 ---
 
-## 📝 License
-
-Project ini dilisensikan di bawah MIT License – lihat file [LICENSE](LICENSE) untuk detail.
-
----
-
 ## 🙏 Acknowledgments
 
 * **Bootstrap Team** – UI Framework
@@ -1581,3 +1575,4 @@ Made with ❤️ by LGN Development Team
 [Live Demo](https://lgn-learning-production.up.railway.app/) • [Documentation](https://github.com/TobiasOP/LGN-Learning)
 
 </div>
+
