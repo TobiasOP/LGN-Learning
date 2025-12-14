@@ -1,3 +1,12 @@
+# KELOMPOK : 
+| Name | NRP |
+| ---- | --- |
+| ... | ... |
+| Mahendra Agung Darmawan | 5025241032 |
+| Agil Lukman Hakim Muchdi  | 5025241037 |
+
+---
+
 # 📚 LGN - Learn GeNius E-Learning Platform
 
 ![LGN Banner](https://img.shields.io/badge/PHP-82.6%25-777BB4?style=flat\&logo=php)
@@ -1577,6 +1586,7 @@ Made with ❤️ by LGN Development Team
 [Live Demo](https://lgn-learning-production.up.railway.app/) • [Documentation](https://github.com/TobiasOP/LGN-Learning)
 
 </div>
+
 
 
 
